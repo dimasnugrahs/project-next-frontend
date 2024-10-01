@@ -6,11 +6,12 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 import { IoCart } from "react-icons/io5";
 import useAnimatedNavToggler from "../../helpers/useAnimatedNavToggler.js";
 
-import logo from "../../images/cek-toko-sebelah.png";
+import logo from "../../images/logo-project-react.svg";
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 import { useCart } from "react-use-cart";
 import { Link } from "react-router-dom";
+import { useAuth } from "context/AuthProvider.js";
 
 const Header = tw.header`
   flex justify-between items-center
@@ -25,13 +26,13 @@ export const NavLinks = tw.div`flex`;
 export const NavLink = tw.a`
   text-lg my-2 lg:text-sm lg:mx-6 lg:my-auto
   font-semibold tracking-wide transition duration-300
-  pb-1 border-b-2 border-transparent hover:border-primary-500 hocus:text-primary-500
+  pb-1 border-b-2 border-transparent hover:border-yellow-800 hocus:text-yellow-800
 `;
 
 export const PrimaryLink = tw(NavLink)`
   lg:mx-0
-  px-8 py-3 rounded bg-primary-500 text-gray-100
-  hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline
+  px-8 py-3 rounded bg-yellow-800 text-gray-100
+  hocus:bg-yellow-900 hocus:text-yellow-800 focus:shadow-outline
   border-b-0
 `;
 
@@ -45,7 +46,7 @@ export const LogoLink = styled(NavLink)`
 
 export const MobileNavLinksContainer = tw.nav`flex flex-1 items-center justify-between `;
 export const NavToggle = tw.button`
-  lg:hidden z-20 focus:outline-none hocus:text-primary-500 transition duration-300
+  lg:hidden z-20 focus:outline-none hocus:text-yellow-900 transition duration-300
 `;
 export const MobileNavLinks = motion(styled.div`
   ${tw`lg:hidden z-10 fixed top-0 inset-x-0 mx-4 my-6 p-8 border text-center rounded-lg text-gray-900 bg-white`}
@@ -97,22 +98,24 @@ export default ({
   //  2.Buat button logout dan gunakan fungsi logout dari AuthProvider
   /*  3.Tambahkan Ternary Operator untuk link login atau button logout tergantung dari user localstorage */
 
+  const { logout } = useAuth();
+  const user = JSON.parse(localStorage.getItem("user"));
   const defaultLinks = [
     <NavLinks key={1}>
       <NavLink>
-        <Link to={"/"}>Home</Link>
+        <Link to={"/"}>Beranda</Link>
       </NavLink>
       <NavLink>
-        <Link to={"/products"}>Products</Link>
+        <Link to={"/products"}>Semua Produk</Link>
       </NavLink>
       <NavLink>
-        <Link to="/about-us">About Us</Link>
+        <Link to="/about-us">Tentang Kami</Link>
       </NavLink>
       <NavLink>
-        <Link to={"/contact-us"}>Contact Us</Link>
+        <Link to={"/contact-us"}>Kontak Kami</Link>
       </NavLink>
       <NavLink>
-        <Link to={"/orders"}>Orders</Link>
+        <Link to={"/orders"}>Pesan Sekarang</Link>
       </NavLink>
       <NavLink tw="lg:ml-12!">
         <Link to="/cart">
@@ -123,9 +126,18 @@ export default ({
         </Link>
       </NavLink>
 
-      <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#">
-        <Link to={"/login"}>Login</Link>
-      </PrimaryLink>
+      {user ? (
+        <div className="flex gap-x-4 flex-wrap">
+          <p className="my-auto">{user.name}</p>
+          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#">
+            <Link onClick={logout}>Logout</Link>
+          </PrimaryLink>
+        </div>
+      ) : (
+        <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#">
+          <Link to={"/login"}>Login</Link>
+        </PrimaryLink>
+      )}
     </NavLinks>,
   ];
 

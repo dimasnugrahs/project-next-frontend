@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useProductsContext } from "context/product_context";
+import axios from "axios";
 
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const Header = tw(SectionHeading)``;
@@ -34,7 +35,7 @@ const TabControl = styled.div`
   &:hover {
     ${tw`bg-gray-300 text-gray-700`}
   }
-  ${(props) => props.active && tw`bg-primary-500! text-gray-100!`}
+  ${(props) => props.active && tw`bg-yellow-800! text-gray-100!`}
   }
 `;
 
@@ -84,28 +85,62 @@ export default ({ heading = "Checkout the Menu" }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [tabsKeys, setTabsKeys] = useState([
-    "Best Sellers",
-    "Main",
-    "Soup",
-    "Desserts",
-  ]);
-  const [activeTab, setActiveTab] = useState("Best Sellers");
-  const { addItem, updateItemQuantity, items } = useCart();
-  const { products } = useProductsContext();
-  const getRandomCards = () => {
-    const cards = products;
-    return cards.sort(() => Math.random() - 0.5);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [categories, setCategories] = useState([]);
+
+  const getCategories = async () => {
+    try {
+      const response = await axios.get(
+        process.env.REACT_APP_API_URL + "/categories"
+      );
+      console.log("response", response);
+      const category = response.data.data.map((item) => item.name);
+      console.log("category", category);
+      setCategories(["Best Sellers", ...category]);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const tabs = {
-    "Best Sellers": products
-      .sort((a, b) => b.stars - a.stars) // Sort by stars in descending order
-      .slice(0, 8), // Get the top 8 items
-    Main: getRandomCards(), // Perbaharui filter berdasarkan Kaos
-    Soup: getRandomCards(), // Perbaharui filter berdasarkan Sepatu
-    Desserts: getRandomCards(), // Perbaharui filter berdasarkan Jaket
-  };
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  console.log("Categories:", categories);
+
+  const [activeTab, setActiveTab] = useState("Best Sellers");
+  const { addItem, updateItemQuantity, items } = useCart();
+  const { products, getProductById } = useProductsContext();
+
+  // const getRandomCards = () => {
+  //   const cards = products;
+  //   return cards.sort(() => Math.random() - 0.5);
+  // };
+
+  const tabs = categories.reduce((acc, category) => {
+    console.log("category", category);
+    if (category === "Best Sellers") {
+      acc[category] = products
+        .sort((a, b) => b.stars - a.stars) // Sort by stars in descending order
+        .slice(0, 8); // Get the top 8 items
+    } else {
+      acc[category] = products.filter(
+        (product) => product.category.name === category
+      );
+    }
+    return acc;
+  }, {});
+
+  // const tabs = categories.reduce((acc, category) => {
+  //   if (category === "Best Sellers") {
+  //     acc[category] = products.slice(0, 8);
+  //   } else {
+  //     acc[category] = products.filters(
+  //       (product) => product.category.name === category
+  //     );
+  //   }
+  //   return acc;
+  // });
 
   const openModal = (item) => {
     setSelectedItem(item);
@@ -163,7 +198,7 @@ export default ({ heading = "Checkout the Menu" }) => {
         <HeaderRow>
           <Header>{heading}</Header>
           <TabsControl>
-            {Object.keys(tabs).map((tabName, index) => (
+            {categories.map((tabName, index) => (
               <TabControl
                 key={index}
                 active={activeTab === tabName}
@@ -175,7 +210,7 @@ export default ({ heading = "Checkout the Menu" }) => {
           </TabsControl>
         </HeaderRow>
 
-        {tabsKeys.map((tabKey, index) => (
+        {categories.map((tabKey, index) => (
           <TabContent
             key={index}
             variants={{
@@ -204,8 +239,13 @@ export default ({ heading = "Checkout the Menu" }) => {
                 >
                   <Link to={`/detail-product/${card.id}`}>
                     <CardImageContainer
-                      image={card.image}
+                      image={
+                        process.env.REACT_APP_API_URL +
+                        "/images/" +
+                        card.images[0]
+                      }
                       className="flex items-center justify-center"
+                      onClick={() => getProductById(card.id)}
                     />
                   </Link>
                   <CardButton onClick={() => openModal(card)}>

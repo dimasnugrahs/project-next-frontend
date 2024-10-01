@@ -11,6 +11,10 @@ import ShieldIconImage from "images/shield-icon.svg";
 import CustomizeIconImage from "images/customize-icon.svg";
 import { ReactComponent as SvgDecoratorBlob3 } from "images/svg-decorator-blob-3.svg";
 
+import QualityIconImage from "images/quality-icon.png";
+import SafetyIconImage from "images/safety-icon.png";
+import IntegrityIconImage from "images/integrity-icon.png";
+
 const Heading = tw(SectionHeading)``;
 const Subheading = tw(SubheadingBase)`text-center mb-3`;
 const Description = tw(SectionDescription)`text-center mx-auto`;
@@ -53,25 +57,25 @@ const DecoratorBlob = styled(SvgDecoratorBlob3)`
 export default ({
   cards = [
     {
-      imageSrc: ShieldIconImage,
-      title: "Secure",
-      description: "We strictly only deal with vendors that provide top notch security.",
+      imageSrc: QualityIconImage,
+      title: "Kualitas",
+      description: "Kami memastikan semua produk kami memenuhi standar kualitas tertinggi.",
       url: "https://timerse.com"
     },
     {
-      imageSrc: SupportIconImage,
-      title: "24/7 Support",
-      description: "Lorem ipsum donor amet siti ceali placeholder text",
+      imageSrc: IntegrityIconImage,
+      title: "Integritas",
+      description: "Menjaga hubungan yang kuat dengan pelanggan melalui layanan yang handal dan transparan.",
       url: "https://google.com"
     },
     {
-      imageSrc: CustomizeIconImage,
-      title: "Customizable",
-      description: "Lorem ipsum donor amet siti ceali placeholder text",
+      imageSrc: SafetyIconImage,
+      title: "Keamanan",
+      description: "Memastikan semua material aman untuk digunakan dan sesuai dengan regulasi yang berlaku.",
       url: "https://reddit.com"
     }
   ],
-  linkText = "Learn More",
+  linkText = "Pelajari lebih lanjut",
   heading = "",
   subheading = "",
   description = "",
@@ -102,8 +106,8 @@ export default ({
                 <p className="description">{card.description}</p>
                 {linkText && (
                   <span className="link">
-                    <span>{linkText}</span>
-                    <ArrowRightIcon className="icon" />
+                    <span className="text-yellow-800">{linkText}</span>
+                    <ArrowRightIcon className="icon text-yellow-800" />
                   </span>
                 )}
               </Card>

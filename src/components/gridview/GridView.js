@@ -27,7 +27,9 @@ const GridView = ({ products }) => {
           return (
             <Product
               key={item.id}
-              image={item.image}
+              image={
+                process.env.REACT_APP_API_URL + "/images/" + item.images[0]
+              }
               name={item.name}
               id={item.id}
               price={item.price}

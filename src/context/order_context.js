@@ -7,7 +7,9 @@ const OrdersContext = React.createContext();
 
 export const OrderProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
-  const [order, setOrder] = useState([]);
+  const [order, setOrder] = useState({});
+  const url = process.env.REACT_APP_API_URL;
+  const user = JSON.parse(localStorage.getItem("user"));
   const [formData, setFormData] = useState({
     address: "",
     city: "",
@@ -23,9 +25,17 @@ export const OrderProvider = ({ children }) => {
   // 2. Buatkan fungsi createOrder
   const getOrdersByUserId = async (id) => {
     try {
-      // Your code here
+      const response = await axios.get(`${url}/orders`, {
+        headers: {
+          Authorization: `${user.token}`,
+        },
+      });
+
+      setOrders(response.data);
+      console.log(response.data);
     } catch (err) {
       // Your code here
+      console.log(err);
     }
   };
 
@@ -39,6 +49,8 @@ export const OrderProvider = ({ children }) => {
         order,
         formData,
         setFormData,
+        setOrder,
+        getOrdersByUserId,
         // panggil fungsinya disini
       }}
     >

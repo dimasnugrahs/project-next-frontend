@@ -10,13 +10,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { formatPrice } from "helpers/helpers";
 import { FaStar, FaStarHalf, FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useProductsContext } from "context/product_context";
 
 const DetailProduct = () => {
   const { id } = useParams();
   const { addItem, items, updateItemQuantity } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [product, setProduct] = useState({});
+
+  const { product, setProduct, getProductById } = useProductsContext();
   const [showModal, setShowModal] = useState(false);
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -51,13 +53,74 @@ const DetailProduct = () => {
   const CancelButton = tw.button`text-sm mt-4 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md ml-5 focus:outline-none cursor-pointer`;
 
   const handleAddToCart = () => {
+    const selected = items.find(
+      (item) => item.id === `${selectedItem.id}-${selectedColor}`
+    );
+    console.log("selected:", selected);
+    console.log("selected item:", selectedItem);
     if (selectedItem && selectedColor) {
-      // Lengkapi code berikut
+      const quantityNumber = Number(quantity);
+
+      if (quantityNumber > product.stock) {
+        toast.error(`Stok tidak tersedia`, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return;
+      } else if (quantityNumber + selected.quantity > product.stock) {
+        toast.error(`Quantity melebihi jumlah stok`, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return;
+      } else {
+        addItem(
+          {
+            ...product,
+            color: selectedColor,
+            id: `${product.id}-${selectedColor}`,
+            trueId: selectedItem.id,
+          },
+          quantity
+        );
+
+        toast.success(`Berhasil ditambahkan ke dalam keranjang`, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setShowModal(false);
+      }
+    } else {
+      toast.error(`Pilih warna terlebih dahulu`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setShowModal(false);
     }
   };
 
   useEffect(() => {
-    // Your code here
+    getProductById(id);
   }, [id]);
 
   const handleChangePrice = () => {
@@ -65,7 +128,8 @@ const DetailProduct = () => {
   };
 
   const handleQuantityChange = (newQuantity) => {
-    setQuantity(Math.max(1, Math.min(10, newQuantity))); // Ensure quantity is within the allowed range
+    const maxQuantity = product?.stock || 0;
+    setQuantity(Math.max(1, Math.min(maxQuantity, newQuantity))); // Ensure quantity is within the allowed range
   };
 
   useEffect(() => {
@@ -90,8 +154,12 @@ const DetailProduct = () => {
               {Array.isArray(product.images) && product.images.length > 0 && (
                 <>
                   <ProductImage
-                    src={product.images[mainImageIndex].url}
-                    alt={product.name}
+                    src={
+                      process.env.REACT_APP_API_URL +
+                      "/images/" +
+                      product.images[mainImageIndex]
+                    }
+                    alt={product.title}
                   />
                 </>
               )}
@@ -100,7 +168,7 @@ const DetailProduct = () => {
                   {product.images.map((image, index) => (
                     <img
                       key={index}
-                      src={image.url}
+                      src={process.env.REACT_APP_API_URL + "/images/" + image}
                       alt={`${product.name} - ${index + 1}`}
                       className={`h-20 w-20 rounded cursor-pointer ${
                         index === mainImageIndex
@@ -115,8 +183,8 @@ const DetailProduct = () => {
             </div>
 
             <ProductInfo>
-              <Title>Nama Product </Title>
-              <RatingReviews>
+              <Title>{product.title} </Title>
+              {/* <RatingReviews>
                 <div className="flex items-center justify-center md:justify-normal">
                   {product.stars}
                   <span className=" flex mx-2">
@@ -140,18 +208,21 @@ const DetailProduct = () => {
                       );
                     })}
                   </span>
-                  | Reviews:
+                  | Reviews: {product.reviews}
                 </div>
-              </RatingReviews>
-              <Description>Deskripsi</Description>
+              </RatingReviews> */}
+              <Description>{product.description}</Description>
               <div>
-                <p className="mb-2">Available : </p>
-                <p className="mb-2">SKU : </p>
-                <p className="mb-2">Company :</p>
+                <p className="mb-2">
+                  Ketersediaan :{" "}
+                  {product.stock > 0 ? "Tersedia" : "Tidak Tersedia"}
+                </p>
+                <p className="mb-2">Stok : {product.stock} </p>
+                <p className="mb-2">Merk : {product.company}</p>
                 <hr className="my-4 h-1 border bg-gray-500" />
 
                 <div className="flex">
-                  <p className="my-auto mr-4">Colors : </p>
+                  <p className="my-auto mr-4">Warna : </p>
                   {Array.isArray(product.colors) && (
                     <div className="flex space-x-2">
                       {product.colors.map((color, index) => (
@@ -203,14 +274,10 @@ const DetailProduct = () => {
               <h2 tw="text-2xl font-semibold mb-4">
                 Are you sure want add this item to cart?
               </h2>
-              <p>Name : {selectedItem.name}</p>
+              <p>Name : {FormData.address}</p>
               <p>Quantity : {quantity}</p>
               <div className="flex items-center justify-center">
                 <p className="my-auto mr-3">Color : </p>
-                <div
-                  className={`relative w-8 h-8 rounded-full cursor-pointer border-2 `}
-                  style={{ backgroundColor: selectedColor }}
-                ></div>
               </div>
               <button
                 className="text-sm cursor-pointer bg-green-500 text-white px-6 py-3 rounded-md hover:bg-green-700"

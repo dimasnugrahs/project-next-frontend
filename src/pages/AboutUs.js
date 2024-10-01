@@ -12,49 +12,53 @@ import Features from "components/features/ThreeColSimple.js";
 // import Features from "components/features/ThreeColWithSideImage.js";
 import TeamCardGrid from "components/cards/ProfileThreeColGrid.js";
 
-import SupportIconImage from "images/support-icon.svg";
-import ShieldIconImage from "images/shield-icon.svg";
-import CustomerLoveIconImage from "images/simple-icon.svg";
+import QualityIconImage from "images/quality-icon.png";
+import SafetyIconImage from "images/safety-icon.png";
+import IntegrityIconImage from "images/integrity-icon.png";
+import heroBackground from "../images/hero-background.jpg";
+import mainImage from "../images/main-image.jpg";
 
-const Subheading = tw.span`uppercase tracking-wider text-sm`;
+const Subheading = tw.span`uppercase tracking-wider text-sm text-yellow-800`;
 export default () => {
   return (
     <AnimationRevealPage>
       <Header />
       <MainFeature1
-        subheading={<Subheading>About Treact</Subheading>}
-        heading="We are a modern design agency."
+        subheading={<Subheading>About Amerta</Subheading>}
+        heading="We are a modern construction company."
         buttonRounded={false}
         primaryButtonText="See Portfolio"
-        imageSrc="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=768&q=80"
+        imageSrc={heroBackground}
+        description="Our mission is to build lasting relationships with our clients by providing exceptional construction services that exceed their expectations. We strive to be industry leaders in quality, innovation, and sustainability, contributing positively to the communities we serve."
       />
       <MainFeature1
         subheading={<Subheading>Our Vision</Subheading>}
-        heading="We aim to disrupt the design space."
+        heading="We aim to disrupt the future."
         buttonRounded={false}
         primaryButtonText="Contact Us"
-        imageSrc="https://images.unsplash.com/3/doctype-hi-res.jpg?ixlib=rb-1.2.1&auto=format&fit=crop&w=768&q=80"
+        imageSrc={mainImage}
         textOnLeft={false}
+        description="To be the construction company of choice known for our dedication to quality, innovative solutions, and a customer-centric approach, ultimately shaping a better and sustainable built environment"
       />
       <Features
         subheading={<Subheading>Our Values</Subheading>}
         heading="We follow these."
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        description="Build lasting relationships with our clients by providing exceptional construction services that exceed their expectations."
         cards={[
           {
-            imageSrc: SupportIconImage,
-            title: "24/7 Support",
-            description: "Lorem ipsum donor amet siti ceali placeholder text alipiscing elit sed do eiusmod temport"
+            imageSrc: QualityIconImage,
+            title: "Kualitas",
+            description: "Kami memastikan semua produk kami memenuhi standar kualitas tertinggi."
           },
           {
-            imageSrc: ShieldIconImage,
-            title: "Strong Teams",
-            description: "Lorem ipsum donor amet siti ceali placeholder text alipiscing elit sed do eiusmod temport"
+            imageSrc: IntegrityIconImage,
+            title: "Integritas",
+            description: "Menjaga hubungan yang kuat dengan pelanggan melalui layanan yang handal dan transparan."
           },
           {
-            imageSrc: CustomerLoveIconImage,
-            title: "Customer Satisfaction",
-            description: "Lorem ipsum donor amet siti ceali placeholder text alipiscing elit sed do eiusmod temport"
+            imageSrc: SafetyIconImage,
+            title: "Keamanan",
+            description: "Memastikan semua material aman untuk digunakan dan sesuai dengan regulasi yang berlaku."
           },
         ]}
         linkText=""

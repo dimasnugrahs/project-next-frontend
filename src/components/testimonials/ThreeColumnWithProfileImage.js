@@ -13,7 +13,7 @@ const TestimonialContainer = tw.div`mt-16 lg:w-1/3`;
 const Testimonial = tw.div`px-4 text-center max-w-xs mx-auto flex flex-col items-center`;
 const Image = tw.img`w-20 h-20 rounded-full`;
 const Quote = tw.blockquote`mt-5 text-gray-600 font-medium leading-loose`;
-const CustomerName = tw.p`mt-5 text-gray-900 font-semibold uppercase text-sm tracking-wide`;
+const CustomerName = tw.p`mt-5 text-yellow-800 font-semibold uppercase text-sm tracking-wide`;
 
 const DecoratorBlob1 = styled(SvgDecoratorBlob1)`
   ${tw`pointer-events-none -z-20 absolute left-0 top-0 h-56 w-56 opacity-15 transform -translate-x-2/3 -translate-y-12 text-teal-400`}
@@ -23,22 +23,36 @@ const DecoratorBlob2 = styled(SvgDecoratorBlob2)`
 `;
 
 export default ({
-  subheading = "Testimonials",
+  // subheading = "Testimonials",
   heading = "Customer's Review",
   testimonials = [
     {
       imageSrc:
         "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3.25&w=512&h=512&q=80",
       quote:
-        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
-      customerName: "Charlotte Hale"
-    }
+        "Kami telah bekerja sama dengan Amerta Solutions untuk beberapa proyek besar dan kecil. Selalu puas dengan kualitas material, ketepatan pengiriman, dan layanan pelanggan mereka.",
+      customerName: "Ben Budi Hartono"
+    },
+    {
+      imageSrc:
+        "https://images.unsplash.com/photo-1631947430066-48c30d57b943?q=80&w=1916&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      quote:
+        "Selalu lengkap dan berkualitas. Kerjasama kami berjalan baik selama bertahun-tahun.",
+      customerName: "Agus Setiawan"
+    },
+    {
+      imageSrc:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3.25&w=512&h=512&q=80",
+      quote:
+        "Selalu memenuhi standar kualitas yang kami butuhkan. Tim mereka sangat membantu dan ramah dalam memberikan saran yang tepat untuk proyek kami.",
+      customerName: "Jessie Kathy"
+    },
   ]
 }) => {
   return (
     <Container>
       <ContentWithPaddingXl>
-        {subheading && <Subheading>{subheading}</Subheading>}
+        {/* {subheading && <Subheading>{subheading}</Subheading>} */}
         <Heading>{heading}</Heading>
         <Testimonials>
           {testimonials.map((testimonial, index) => (

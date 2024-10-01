@@ -56,12 +56,12 @@ const filter_reducer = (state, action) => {
     }
     if (sort === "name-a") {
       tempProducts = filtered_products.sort((a, b) => {
-        return a.name.localeCompare(b.name);
+        return a.title.localeCompare(b.title);
       });
     }
     if (sort === "name-z") {
       tempProducts = filtered_products.sort((a, b) => {
-        return b.name.localeCompare(a.name);
+        return b.title.localeCompare(a.title);
       });
     }
 
@@ -77,12 +77,12 @@ const filter_reducer = (state, action) => {
     let tempProducts = [...all_products];
     if (text) {
       tempProducts = tempProducts.filter((product) =>
-        product.name.toLowerCase().startsWith(text)
+        product.title.toLowerCase().startsWith(text)
       );
     }
     if (category !== "all") {
       tempProducts = tempProducts.filter(
-        (product) => product.category === category
+        (product) => product.category.name === category
       );
     }
     if (company !== "all") {

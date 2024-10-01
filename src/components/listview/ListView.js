@@ -28,9 +28,13 @@ const ListView = ({ products }) => {
     <section>
       {currentProducts.map((item) => (
         <article key={item.id} className="flex pb-10 ">
-          <img src={item.image} className="w-[250px] h-[150px]" alt=""></img>
+          <img
+            src={process.env.REACT_APP_API_URL + "/images/" + item.images[0]}
+            className="w-[250px] h-[150px]"
+            alt=""
+          ></img>
           <div className="my-auto ml-10">
-            <p className="text-2xl font-bold text-[#102a42]">{item.name}</p>
+            <p className="text-2xl font-bold text-[#102a42]">{item.title}</p>
             <p className="text-[#b99179]">{formatPrice(item.price)}</p>
             <p className="mt-2 mb-3 text-[#102a42]">{item.description}</p>
             <Link
