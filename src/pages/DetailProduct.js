@@ -72,17 +72,17 @@ const DetailProduct = () => {
           progress: undefined,
         });
         return;
-      } else if (quantityNumber + selected.quantity > product.stock) {
-        toast.error(`Quantity melebihi jumlah stok`, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        return;
+        // } else if (quantityNumber + selected.quantity > product.stock) {
+        //   toast.error(`Quantity melebihi jumlah stok`, {
+        //     position: "top-center",
+        //     autoClose: 3000,
+        //     hideProgressBar: false,
+        //     closeOnClick: true,
+        //     pauseOnHover: true,
+        //     draggable: true,
+        //     progress: undefined,
+        //   });
+        //   return;
       } else {
         addItem(
           {
