@@ -25,7 +25,7 @@ const Orders = () => {
       <Header className="mb-8" />
       <Content>
         <div>
-          {orders.map((order) => (
+          {/* {orders.map((order) => (
             <div
               key={order.id}
               className="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-100 dark:border-gray-100 mb-5"
@@ -64,7 +64,9 @@ const Orders = () => {
                 ))}
               </div>
             </div>
-          ))}
+          ))} */}
+
+          <p>Pesanan berhasil dibuat!</p>
         </div>
       </Content>
       <Footer background="bg-white" />
